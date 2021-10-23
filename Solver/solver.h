@@ -6,6 +6,7 @@ bool NotInLine (int k, int grille[9][9], int i);
 bool NotInColumn (int k, int grille[9][9], int j);
 bool NotInSquare (int k, int grille[9][9], int i, int j);
 bool Valid (int grille[9][9], int position);
-int main (void);
+int main (int argc,char* argv[]);
+int strL(char b[]);
 
 #endif
