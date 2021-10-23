@@ -3,6 +3,7 @@
 #include "SDL/SDL_image.h"
 #include "pixel_operations.h"
 
+
 void init_sdl()
 {
     // Init only the video part.
@@ -77,22 +78,37 @@ SDL_Surface* rotozoomSurface(SDL_Surface* image, double angle, double zoom, doub
 int main()
 {
 
+    //if (argc != 2)
+    //{
+      //  errx(1,"argument missing");
+    //}
+
+    //char * temp = argv[1];
+    //double temp = &argv[1];
+
+
     SDL_Surface* image_surface;
-    SDL_Surface* screen_surface;
+    SDL_Surface* image_rotated;
 
     init_sdl();
 
     image_surface = load_image("my_image.jpg");
-    screen_surface = display_image(image_surface);
 
     //wait_for_keypressed();
 
-    display_image(rotozoomSurface(image_surface, 50, 1.0, 1));
+    image_rotated = rotozoomSurface(image_surface, 90 , 1.0, 1);
+    SDL_SaveBMP(image_rotated, "my_image_rotaded.bmp");
 
-    wait_for_keypressed();
+    //wait_for_keypressed();
 
-    SDL_FreeSurface(image_surface);
-    SDL_FreeSurface(screen_surface);
+    SDL_FreeSurface(image_rotated);
 
-    return 0;
+    if (image_rotated == load_image("my_image_rotaded.bmp"))
+    {
+        printf("Image rotated succefuly \n");
+        return 0;
+    }
+    else{
+        return 1;
+    }
 }
