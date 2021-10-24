@@ -13,7 +13,7 @@ struct Network
 	double target;
 	int inputValue1;
 	int inputValue2;
-	double *hidenValue;// 3 hiden values in order;
+	double *hidenValue;
 	double step;
 	double iteration;
 	double learning_rate;
@@ -72,7 +72,7 @@ void randomize(struct Network *net)
 {
 	for(size_t i = 0; i < 6; i++)
 	{
-		(*((*net).weightsHiden + i)) = (double) rand() / (double) RAND_MAX; // RAND() gives a nb btw 0 & rand_max. divise by rand_max and nb btw 0-1.
+		(*((*net).weightsHiden + i)) = (double) rand() / (double) RAND_MAX; 
 		
 	}
 	for(size_t i = 0; i < 3; i++)
@@ -91,19 +91,9 @@ void forward_propagation(struct Network *net, int iteration)
 	for (size_t i = 0; i < 3; ++i)
 	{
 		double sum_hidden = 0.0;
-		//for each hiden value
+		
 		sum_hidden += ((*net).inputValue1) * (*((*net).weightsHiden + i)) + (((*net).inputValue2) * (*((*net).weightsHiden + 3 + i)));
-		//printf("inputValue1 --> %d", (*net).inputValue1);
-		//printf("|");
-		//printf("inputValue2 --> %d\n", (*net).inputValue2);
-		//printf("Hidden Weight %zu--> %f\n",i,*((*net).weightsHiden + i) );
-		//printf("Hidden Weight %zu -->%f\n",i,*((*net).weightsHiden + 3 + i) );
-		//printf("%f\n", *((*net).bias) + i);
-		//printf("%f\n", sum_hidden );
-		//(*((*net).hidenValue + i)) = (((*net).inputValue1) * (*((*net).weightsHiden + i))) + (((*net).inputValue2) * (*((*net).weightsHiden + 3 + i)));
 		*((*net).hidenValue + i) = sigmoid(sum_hidden + *((*net).bias + i));
-		//printf("%f\n", *((*net).hidenValue + i));
-		//printf("herre%f\n", *((*net).hidenValue + i));
 
 	}
 	if(iteration%100==0)
@@ -118,13 +108,7 @@ void forward_propagation(struct Network *net, int iteration)
 
 	for(size_t ii = 0; ii <3; ii++)
 		{
-		(*net).output += (*((*net).hidenValue + ii))*(*((*net).weightsOutput + ii));// faut à partir de la 5 iteration
-
-		//printf("hidden value %f weightsOutput %f", *((*net).hidenValue + ii),*((*net).weightsOutput + ii));
-
-
-		//printf("output %f\n", (*net).output);
-		
+			(*net).output += (*((*net).hidenValue + ii))*(*((*net).weightsOutput + ii));
 		}
 	(*net).output = sigmoid((*net).output + *((*net).bias + 3));
 	if(iteration%100== 0)
@@ -136,13 +120,11 @@ void forward_propagation(struct Network *net, int iteration)
 }
 void back_propagation(struct Network *net)
 {	
-	//((*net).error_output) = cost_function(((*net).target),((*net).output));
 	(*net).error_output = ((*net).target - (*net).output)*derivative_sigmoid((*net).output);
 
 	// WeightsOutput
 	for(size_t i = 0; i < 3; i++)
 	{
-		//fabs gives you a float.
 		(*((*net).weightsOutput + i)) += (*net).step * (*((*net).hidenValue + i)) * ((*net).error_output);
 		
 	}
@@ -150,10 +132,8 @@ void back_propagation(struct Network *net)
 	//WeightsHiden
 	for(size_t ii = 0; ii <  3; ii++)
 	{
-		//(*((*net).error_hidden + ii)) = cost_function(((*net).error_output),(*(*net).weightsOutput + ii));
-		(*((*net).error_hidden + ii)) = ((*net).error_output * (*(*net).weightsOutput + ii)) * derivative_sigmoid(*((*net).hidenValue + ii));
-		//printf("error %zu --> %f\n",ii,*((*net).error_hidden + ii)); 
-		(*((*net).weightsHiden + ii)) += (*net).step * (*((*net).error_hidden + ii)) * (*net).inputValue1;// step*error_hiden*InputValue(erreur trouve au niveau du hidden)
+		(*((*net).error_hidden + ii)) = ((*net).error_output * (*(*net).weightsOutput + ii)) * derivative_sigmoid(*((*net).hidenValue + ii)); 
+		(*((*net).weightsHiden + ii)) += (*net).step * (*((*net).error_hidden + ii)) * (*net).inputValue1;
 		(*((*net).weightsHiden + ii + 3)) += (*net).step * (*((*net).error_hidden + ii)) * (*net).inputValue2;
 	}
 
@@ -185,20 +165,6 @@ void XOR(int x, int y)
 	
 	while(iteration_final <= 10000)
 	{
-		/*for(size_t i = 0; i < 7; i= i + 2)
-		{
-
-			(*net).inputValue1 = (*((*net).input_value + i));
-			(*net).inputValue2 = (*((*net).input_value + i + 1));
-
-			if((((*net).inputValue1 == 0) && ((*net).inputValue2 == 0 ))||(((*net).inputValue1 == 1) && ((*net).inputValue2 == 1)))
-			{
-				(*net).target = 0;
-			}
-			else
-			{
-				(*net).target = 1;
-			}*/
 	                forward_propagation(net,iteration_final);
 			back_propagation(net);
 
