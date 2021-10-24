@@ -71,14 +71,10 @@ void SDL_FreeSurface(SDL_Surface *surface);
 int main()
 {
     SDL_Surface* image_surface;
-    SDL_Surface* screen_surface;
 
     init_sdl();
 
     image_surface = load_image("my_image.jpg");
-    screen_surface = display_image(image_surface);
-
-    wait_for_keypressed();
 
     Uint8 r, g, b, average;
     Uint32 pixel;
@@ -89,17 +85,22 @@ int main()
             pixel = get_pixel(image_surface, i, j);
             SDL_GetRGB(pixel, image_surface->format, &r, &g, &b);
             average = (0.3*r + 0.59*g + 0.11*b);
+            
             pixel = SDL_MapRGB(image_surface->format, average,average,average);
             put_pixel(image_surface, i, j, pixel);
         }
     }
-    update_surface(screen_surface, image_surface);
+    SDL_SaveBMP(image_surface, "my_image_grayscale.bmp");
 
-
-    wait_for_keypressed();
 
     SDL_FreeSurface(image_surface);
-    SDL_FreeSurface(screen_surface);
 
-    return 0;
+    if (image_surface == load_image("my_image_grayscale.bmp"))
+    {
+        printf("Image rotated succefuly \n");
+        return 0;
+    }
+    else{
+        return 1;
+    }
 }

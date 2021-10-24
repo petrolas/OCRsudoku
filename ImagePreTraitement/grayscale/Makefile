@@ -19,5 +19,6 @@ clean:
 	${RM} *.d
 	${RM} display
 	${RM} grayscale
+	${RM} *.bmp
 
 # END

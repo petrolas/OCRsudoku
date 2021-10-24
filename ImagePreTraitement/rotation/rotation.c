@@ -75,17 +75,14 @@ void SDL_FreeSurface(SDL_Surface *surface);
 SDL_Surface* rotozoomSurface(SDL_Surface* image, double angle, double zoom, double smoth);
 
 
-int main()
+int main(int argc, char *argv[])
 {
 
-    //if (argc != 2)
-    //{
-      //  errx(1,"argument missing");
-    //}
-
-    //char * temp = argv[1];
-    //double temp = &argv[1];
-
+    if (argc != 2)
+    {
+        errx(1,"argument missing");
+    }
+    int number = atoi(argv[1]);
 
     SDL_Surface* image_surface;
     SDL_Surface* image_rotated;
@@ -96,7 +93,7 @@ int main()
 
     //wait_for_keypressed();
 
-    image_rotated = rotozoomSurface(image_surface, 90 , 1.0, 1);
+    image_rotated = rotozoomSurface(image_surface, number , 1.0, 1);
     SDL_SaveBMP(image_rotated, "my_image_rotaded.bmp");
 
     //wait_for_keypressed();
