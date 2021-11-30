@@ -1,10 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <stdbool.h>
 #include <string.h>
 #include "solver.h"
 #include "err.h"
-//gcc -Wall -Werror -Wextra -o solver.c main.c
+
+//gcc -Wall -Werror -Wextra -o solver solver.c main.c
 // ${RM} *.result
 
 
@@ -44,15 +44,17 @@ int main (int argc,char* argv[])
 			}
 		}
 		fclose(fichier); //"Ferme" le fichier
-
-		Valid(grille,0); //Résoult la grille
+		if(IsGoodToStart(grille))
+		{
+			Valid(grille,0); //Résoult la grille
+		}
 		
 		//Crée le nouveau nom pour le fichier sortant
 		char Rname[] = ".result";
 		strcat(argv[1],Rname);
 		fichier = fopen(argv[1], "w");
 		
-		//remplie le fichier sortant
+		//Fichier sortant
 		char ligne2[12];
 		for(int i = 0;i<9;i++)
 		{
@@ -81,6 +83,7 @@ int main (int argc,char* argv[])
 	{
 		//Renvoie Erreur en cas de fichier introuvable
 		errx(1,"Impossible de lire ce fichier");
+		
 	}
 	return 0;
 }
